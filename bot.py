@@ -1,21 +1,58 @@
 import tweepy, time, sys, datetime
-from Functions import beginbot
+
+# We are storing twitter credentials in it's own file
+from credentials import CONSUM_KEY, CONSUM_SEC, ACCESS_KEY, ACCESS_SEC
+
 from Functions import btcitems
 from Functions import statisticitems
-api = beginbot.start()
+from Functions import fake_data_generator
+from Functions import fake_api
+
+# Use the fake generator instead of pulling data from the 
+# coindesk api
+SETTING_USE_FAKE_GENERATOR = True
+
+# Allow running without actually connecting to twitter to post results
+SETTING_DONT_CONNECT_TO_TWITTER = True
+
+def authenticate():
+    """ Authenticate with twitter, and return handler if succesful. """
+    if SETTING_DONT_CONNECT_TO_TWITTER:
+        api = fake_api.FakeAPI()
+
+        return api
+
+    authentication = tweepy.OAuthHandler(CONSUM_KEY, CONSUM_SEC)
+    authentication.set_access_token(ACCESS_KEY, ACCESS_SEC)
+    api = tweepy.API(authentication)
+    return api
+
+api = authenticate()
 if not api:
     print("I had an oopsie :/")
     sys.exit(1)
+
 #Bot is online and connected to twitter account...
 print("My name is", api.me().name, "and I'm awake!")
-ORIGINALPRICE = btcitems.retrieveprice() #Original Price of BTC
+
+if SETTING_USE_FAKE_GENERATOR:
+    ORIGINALPRICE = fake_data_generator.retrieveprice()
+else:
+    ORIGINALPRICE = btcitems.retrieveprice() #Original Price of BTC
+
 NOW = datetime.datetime.utcnow()
 NEXT_TIME = NOW + datetime.timedelta(minutes=1)
 statisticitems.STARTVAR = ORIGINALPRICE[0]
+
 while 1:
     #Continuously check for btc price
     time.sleep(12) #Wait 120 Seconds (2mins) 12 for testing
-    PRICEDATA = btcitems.retrieveprice() #New Price of BTC
+
+    if SETTING_USE_FAKE_GENERATOR:
+        PRICEDATA = fake_data_generator.retrieveprice()
+    else:
+        PRICEDATA = btcitems.retrieveprice() #New Price of BTC
+
     VALID_DATA = btcitems.is_validprice(PRICEDATA, ORIGINALPRICE)
     if VALID_DATA == "up":
         #Price went up
