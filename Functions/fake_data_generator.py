@@ -35,7 +35,7 @@ _g = _generate_prices()
 
 def retrieveprice():
     """Retrieve some fake data, for testing purposes."""
-    return next(_g)
+    return list(next(_g))
 
 
 # if run as a script, print out some tests

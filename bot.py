@@ -6,13 +6,22 @@ from credentials import CONSUM_KEY, CONSUM_SEC, ACCESS_KEY, ACCESS_SEC
 from Functions import btcitems
 from Functions import statisticitems
 from Functions import fake_data_generator
+from Functions import fake_api
 
 # Use the fake generator instead of pulling data from the 
 # coindesk api
 SETTING_USE_FAKE_GENERATOR = True
 
+# Allow running without actually connecting to twitter to post results
+SETTING_DONT_CONNECT_TO_TWITTER = True
+
 def authenticate():
     """ Authenticate with twitter, and return handler if succesful. """
+    if SETTING_DONT_CONNECT_TO_TWITTER:
+        api = fake_api.FakeAPI()
+
+        return api
+
     authentication = tweepy.OAuthHandler(CONSUM_KEY, CONSUM_SEC)
     authentication.set_access_token(ACCESS_KEY, ACCESS_SEC)
     api = tweepy.API(authentication)
