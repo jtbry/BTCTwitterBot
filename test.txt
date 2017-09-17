@@ -1,0 +1,2 @@
+#Compare current vars from locally saved to file saved vars
+#Overwrite file with new vars
