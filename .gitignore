@@ -84,6 +84,15 @@ celerybeat-schedule
 venv/
 ENV/
 
+# Python module: venv
+bin/
+share/
+pyvenv.cfg
+lib64
+
+# ignore vim swapfiles
+*.swp
+
 # Spyder project settings
 .spyderproject
 
