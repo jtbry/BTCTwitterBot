@@ -6,13 +6,15 @@ import imghdr
 import codecs
 from bs4 import BeautifulSoup
 from Functions import statisticitems
+
 def retrieveprice():
-    #Retrieve current bitcoin price using coindesk.com
+    """Retrieve current bitcoin price using coindesk.com"""
     url = "https://api.coindesk.com/v1/bpi/currentprice.json" #URL to coindesk API
     urlrequest = urllib.request.urlopen(url)
     pagereader = codecs.getreader("utf-8")
     pagedata = json.load(pagereader(urlrequest))
     urlrequest.close()
+
     #Data from json script retrieved process it
     usdrate = pagedata['bpi']['USD']['rate'] #Price in USD
     eurrate = pagedata['bpi']['EUR']['rate'] #Price in EUR
@@ -20,8 +22,9 @@ def retrieveprice():
     updatet = pagedata['time']['updated'] #Date time it was updated!
     info = [usdrate, eurrate, gbprate, updatet]
     return info
+
 def is_validprice(newdata, olddata):
-    #Check if price has changed +/- 5
+    """Check if price has changed +/- 5"""
     math = float(olddata[0].replace(',', '')) - float(newdata[0].replace(',', ''))
     if math >= .1:
         #Price dropped
@@ -45,12 +48,14 @@ def is_validprice(newdata, olddata):
         #Price didn't change by +/- 5
         print("Price didn't change...", "(", olddata[0], "|", newdata[0], ")")
         return "neither"
+
 def getmath(ndata, odata):
-    #Retrieve the drop percentage and how much it's dropped by
+    """Retrieve the drop percentage and how much it's dropped by"""
     difference = float(odata[0].replace(',', '')) - float(ndata[0].replace(',', ''))
     percentchng = (difference / float(odata[0].replace(',', ''))) * 100
     info = [ndata, odata, difference, percentchng]
     return info
+
 def preparestring(math, oldprice, newprice, var, alldata):
     elements = ["rose", "dropped"]
     for data in alldata:
