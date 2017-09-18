@@ -1,2 +1,3 @@
-#Compare current vars from locally saved to file saved vars
-#Overwrite file with new vars
+Take everything from data array
+Do the math to figure out differences in current array vs file data
+print results

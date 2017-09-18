@@ -40,10 +40,11 @@ if SETTING_USE_FAKE_GENERATOR:
 else:
     ORIGINALPRICE = btcitems.retrieveprice() #Original Price of BTC
 
-NOW = datetime.datetime.utcnow()
-NEXT_TIME = NOW + datetime.timedelta(minutes=1)
-statisticitems.STARTVAR = ORIGINALPRICE[0]
-
+NOW = datetime.datetime.strptime(statisticitems.gethourtime(), '%Y-%m-%d %H:%M:%S.%f')
+NEXT_TIME = NOW + datetime.timedelta(minutes=2)
+statisticitems.STARTVAR = str(round(float(ORIGINALPRICE[0].replace(',', '')), 2))
+statisticitems.sethourtime(NOW)
+statisticitems.TIMEVAR = NOW
 while 1:
     #Continuously check for btc price
     time.sleep(12) #Wait 120 Seconds (2mins) 12 for testing
@@ -70,6 +71,9 @@ while 1:
         ORIGINALPRICE = PRICEDATA
     if(datetime.datetime.utcnow() > NEXT_TIME):
         #statisticitems.writetofile("A minute has passed...")
+        print("It is next time!")
         NOW = datetime.datetime.utcnow()
-        NEXT_HOUR = NOW + datetime.timedelta(minutes=1)    
+        NEXT_TIME = NOW + datetime.timedelta(minutes=1)
+        statisticitems.sethourtime(NOW)    
+        statisticitems.comparedata()
     #else price didn't change...

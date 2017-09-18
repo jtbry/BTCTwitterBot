@@ -26,23 +26,23 @@ def retrieveprice():
 def is_validprice(newdata, olddata):
     """Check if price has changed +/- 5"""
     math = float(olddata[0].replace(',', '')) - float(newdata[0].replace(',', ''))
-    if math >= .1:
+    if math >= 5:
         #Price dropped
         print("Price dropped from", olddata[0], "to", newdata[0], "with a difference of", math)
-        statisticitems.CURRENTVAR = newdata[0]
-        statisticitems.PERCENTVAR = getmath(newdata, olddata)[3]
+        statisticitems.CURRENTVAR = str(round(float(newdata[0].replace(',', '')), 2))
+        statisticitems.PERCENTVAR = str(round(float(getmath(newdata, olddata)[3]), 2))
         statisticitems.updatedata()
         return "down"
-    elif math <= -.1:
+    elif math <= -5:
         #Price raised
         print("Price rose from", olddata[0], "to", newdata[0], "with a difference of", math)
-        statisticitems.CURRENTVAR = newdata[0]
-        statisticitems.PERCENTVAR = getmath(newdata, olddata)[3]
+        statisticitems.CURRENTVAR = str(round(float(newdata[0].replace(',', '')), 2))
+        statisticitems.PERCENTVAR = str(round(float(getmath(newdata, olddata)[3]), 2))
         statisticitems.updatedata()
         return "up"   
     elif math != 0:
-        statisticitems.CURRENTVAR = newdata[0]
-        statisticitems.PERCENTVAR = getmath(newdata, olddata)[3]
+        statisticitems.CURRENTVAR = str(round(float(newdata[0].replace(',', '')), 2))
+        statisticitems.PERCENTVAR = str(round(float(getmath(newdata, olddata)[3]), 2))
         statisticitems.updatedata()
     else:
         #Price didn't change by +/- 5

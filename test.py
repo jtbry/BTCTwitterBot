@@ -1,3 +1,3 @@
-with open("test.txt", "r+") as handler:
-    fileread = handler.readline()
-print(fileread)
+from collections import namedtuple
+Listtest = namedtuple('Filedata', ['one', 'two', 'three'])
+print(Listtest(1, 2, 3))
