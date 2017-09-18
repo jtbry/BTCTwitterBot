@@ -10,10 +10,10 @@ from Functions import fake_api
 
 # Use the fake generator instead of pulling data from the 
 # coindesk api
-SETTING_USE_FAKE_GENERATOR = True
+SETTING_USE_FAKE_GENERATOR = False
 
 # Allow running without actually connecting to twitter to post results
-SETTING_DONT_CONNECT_TO_TWITTER = True
+SETTING_DONT_CONNECT_TO_TWITTER = False
 
 def authenticate():
     """ Authenticate with twitter, and return handler if succesful. """
@@ -41,14 +41,14 @@ else:
     ORIGINALPRICE = btcitems.retrieveprice() #Original Price of BTC
 
 NOW = datetime.datetime.strptime(statisticitems.gethourtime(), '%Y-%m-%d %H:%M:%S.%f')
-NEXT_TIME = NOW + datetime.timedelta(minutes=2)
+NEXT_TIME = NOW + datetime.timedelta(minutes=5)
 statisticitems.STARTVAR = str(round(float(ORIGINALPRICE[0].replace(',', '')), 2))
 statisticitems.sethourtime(NOW)
 statisticitems.TIMEVAR = NOW
 while 1:
     #Continuously check for btc price
-    time.sleep(12) #Wait 120 Seconds (2mins) 12 for testing
-
+    time.sleep(120) #Wait 120 Seconds (2mins) 12 for testing
+    print("loop")
     if SETTING_USE_FAKE_GENERATOR:
         PRICEDATA = fake_data_generator.retrieveprice()
     else:
@@ -75,5 +75,6 @@ while 1:
         NOW = datetime.datetime.utcnow()
         NEXT_TIME = NOW + datetime.timedelta(minutes=1)
         statisticitems.sethourtime(NOW)    
-        statisticitems.comparedata()
+        preparedstring = "Bitcoin price has changed by "+ str(round(statisticitems.comparedata(), 3)) + " in the last hour"
+        api.update_status(preparedstring)
     #else price didn't change...

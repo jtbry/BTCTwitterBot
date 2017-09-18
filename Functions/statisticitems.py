@@ -18,7 +18,7 @@ def comparedata():
     with open("pythonout.dat", 'r+') as handler:
         data = handler.readlines()
     COMPAREOVERALL = float(data[1]) - float(data[2])
-    return print(COMPAREOVERALL)
+    return COMPAREOVERALL
 def updatedata():
     with open("pythonout.dat", 'r+') as handler:
         data = handler.readlines()
